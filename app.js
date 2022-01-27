@@ -1,43 +1,20 @@
 const http = require("http");
 const express = require("express");
+const routes = require("./routes");
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello form ExpressJS",
-  });
-});
-
-app.post("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello form ExpressJS post method",
-  });
-});
-
-app.put("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello form ExpressJS put method",
-  });
-});
-
-app.patch("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello form ExpressJS patch method",
-  });
-});
-
-app.delete("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello form ExpressJS delete method",
-  });
-});
-
-app.all("/posts", (req, res) => {
-  res.status(200).json({
-    message: "Hello form Posts all methods",
-  });
-});
+/**
+ * Status codes:
+ * 200 - OK
+ * 201 - Created
+ * 400 - Bad Request
+ * 401 - Unauthorized
+ * 403 - Forbidden
+ * 422 - Unprocessable Entity
+ * 500 - Internal Server Error
+ */
+app.use("/v1", routes);
 
 const server = http.createServer(app);
 

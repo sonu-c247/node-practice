@@ -7,7 +7,16 @@
  */
 const parseHtml = async (req, res, next) => {
   try {
-    (req.body && req.body.name) ? req.body.name.replace(/<[^>]*>?/gm, '') : ''
+    // if(req.body.isArray()){
+    //  console.log(req.body)
+    // }else{
+      for(var key in req.body) {
+        if(req.body.hasOwnProperty(key)){
+          req.body[key] = req.body[key].replace(/<[^>]*>?/gm, '')
+          console.log(req.body[key]);
+        }
+      }
+    // }
     next();
   } catch (error) {
     return res.status(500).json({

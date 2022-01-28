@@ -4,7 +4,7 @@ const path = require("path");
 const express = require("express");
 const router = express.Router();
 const basename = path.basename(__filename);
-
+console.log("path==",path.basename);
 // read all files of route directory
 fs.readdirSync(__dirname)
   .filter((file) => {

@@ -1,4 +1,5 @@
 "use strict";
+const { UserModel } = require("../models");
 
 /**
  * Get all record
@@ -27,15 +28,24 @@ const index = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const store = async (req, res, next) => {
+const store = async (req, res) => {
   try {
-    // next() or
+    const { firstName, lastName, email, password } = req.body;
+
+    await UserModel.create({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
       data: [],
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message:

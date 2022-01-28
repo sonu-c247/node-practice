@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { PostController } = require("../controllers");
+const { Authorize } = require('../middlewares');
+
+router.use(Authorize.parseHtml)
 
 router.get("/", PostController.index);
 router.post("/", PostController.store);

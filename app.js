@@ -1,9 +1,11 @@
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
-
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.json())
 /**
  * Status codes:
  * 200 - OK
@@ -17,7 +19,6 @@ const app = express();
 app.use("/v1", routes);
 
 const server = http.createServer(app);
-
 server
   .listen(3000)
   .on("listening", () => {

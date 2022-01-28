@@ -6,6 +6,7 @@ const basename = path.basename(__filename);
 
 let controllers = {};
 // read all files of controller directory
+// console.log(__dirname)
 fs.readdirSync(__dirname)
   .filter(file => {
     return (
@@ -15,6 +16,7 @@ fs.readdirSync(__dirname)
   .forEach(file => {
     const controller = require(path.join(__dirname, file));
     controllers[path.basename(file, ".js")] = controller;
+    // console.log(path.basename(file))
   });
 /**
  *

@@ -19,5 +19,4 @@ fs.readdirSync(__dirname)
       route
     );
   });
-
 module.exports = router;

@@ -1,9 +1,10 @@
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
+// const mw = require("./middlewares/Authorize.js");
 
 const app = express();
-
+app.use(express.json());
 /**
  * Status codes:
  * 200 - OK
@@ -15,7 +16,6 @@ const app = express();
  * 500 - Internal Server Error
  */
 app.use("/v1", routes);
-
 const server = http.createServer(app);
 
 server

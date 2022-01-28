@@ -4,7 +4,10 @@ const routes = require("./routes");
 const mongoose = require("mongoose");
 const app = express();
 
+
 app.use(express.json());
+
+
 /**
  * Status codes:
  * 200 - OK
@@ -25,7 +28,7 @@ mongoose
 const server = http.createServer(app);
 
 server
-  .listen(3000)
+  .listen(4000)
   .on("listening", () => {
     console.log(`Server is running on port ${server.address().port}`);
   })

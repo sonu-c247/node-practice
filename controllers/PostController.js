@@ -5,13 +5,12 @@
  * @param { req, res }
  * @returns JsonResponse
  */
-const index = async (req, res, next) => {
+const index =  (req, res) => {
   try {
-    // next() or
     return res.status(200).json({
       success: true,
       message: "Posts fetched successfully.",
-      data: [],
+      data: [user],
     });
   } catch (error) {
     return res.status(500).json({
@@ -29,11 +28,13 @@ const index = async (req, res, next) => {
  */
 const store = async (req, res, next) => {
   try {
+    const user = req.body;
+    console.log("Inside postController",user)
     // next() or
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [],
+      data: [user],
     });
   } catch (error) {
     return res.status(500).json({

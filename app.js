@@ -25,7 +25,7 @@ mongoose
 const server = http.createServer(app);
 
 server
-  .listen(3000)
+  .listen(8000)
   .on("listening", () => {
     console.log(`Server is running on port ${server.address().port}`);
   })

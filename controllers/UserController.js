@@ -42,7 +42,7 @@ const store = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [],
+      data: [req.body],
     });
   } catch (error) {
     console.log(error);

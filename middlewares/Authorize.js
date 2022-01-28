@@ -1,12 +1,18 @@
-const Authorize= (req, res, next) => {
+const Authorize = (req, res, next) => {
     const check = req.body;
-    if (check.email.match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+    if (!check.email.match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     )) {
-        console.log(check.email, " is valid");
-        next()
-    } else {
-        console.log(check.email, " is not valid");
-        return res.status(403).send("Invalid Email");
+        return res.status(403).send("Invalid not Email");
+    
+    }else if(!check.password.match(/^(?=.*?[A-Z])+(?=.*?[a-z])+(?=.*?[0-9])+(?=.*?[#?!@$%^&*-]).{8,}$/)){
+        return res.status(403).send("password must be eight characters including one uppercase letter, one special character and alphanumeric characters");
     }
-} 
+    else if(!check.firstname.match( /^[a-z]+$/i) || ! check.lastname.match( /^[a-z]+$/i) ){
+        return res.status(403).send("name must be character");
+    }
+    else {
+        console.log("data save successfully ");
+        next()    
+    }
+}
 module.exports = Authorize;

@@ -1,7 +1,7 @@
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
-// const mw = require("./middlewares/Authorize.js");
+
 
 const app = express();
 app.use(express.json());

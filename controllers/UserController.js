@@ -29,11 +29,11 @@ const index = async (req, res, next) => {
  */
 const store = async (req, res, next) => {
   try {
-    // next() or
+    const data =req.body;
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [],
+      data: [data],
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,38 +1,14 @@
 const http = require("http");
 const express = require('express')
-const bodyParser = require('body-parser')
-const { validate, ValidationError, Joi } = require('express-validation')
-
-const login = {
-  body: Joi.object({
-    email: Joi.string()
-      .email()
-      .required(),
-    password: Joi.string()
-      .regex(/[a-zA-Z0-9]{3,30}/)
-      .required(),
-  }),
-}
-
+require("./db/conn");
+const routes = require("./routes");
+const student = require("./models/UserModel");//connect schema and models
+const middle = require("./middlewares/Authorize")//connect middlewares
 const app = express();
-app.use(bodyParser.json())
+app.use(express.json());
+app.use(middle.Validation);//middlewares
+app.use(middle.signUp);//minddlewarws
 
-app.post('/login', validate(login, {}, {}), (req, res) => {
-  res.json(200)
-  console.log("email and passwaord post sucessucfully")
-
-})
-
-app.use(function(err, req, res, next) {
-  if (err instanceof ValidationError) {
-    console.log("invalid data");
-    return res.status(err.statusCode).json(err)
-    
-  }
-
-  return res.status(500).json(err)
-  
-})
 
 
 
@@ -57,7 +33,7 @@ const app = express();
  * 500 - Internal Server Error
  */
 
-//app.use("/v1", routes);
+app.use("/v1", routes);
 
 const server = http.createServer(app);
 

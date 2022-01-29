@@ -117,6 +117,7 @@ const destroy = async (req, res, next) => {
  * Export as a single common js module
  */
 module.exports = {
+  
   index,
   store,
   details,

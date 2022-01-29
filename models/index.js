@@ -4,8 +4,8 @@ const path = require("path");
 
 const basename = path.basename(__filename);
 
-let middleware = {};
-// read all files of controller directory
+let models = {};
+// read all files of model directory
 fs.readdirSync(__dirname)
   .filter(file => {
     return (
@@ -13,10 +13,10 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach(file => {
-    const controller = require(path.join(__dirname, file));
-    middleware[path.basename(file, ".js")] = controller;
+    const model = require(path.join(__dirname, file));
+    models[path.basename(file, ".js")] = model;
   });
 /**
  *
  */
-module.exports = middleware;
+module.exports = models;

@@ -1,9 +1,11 @@
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
+const middlewares = require("./middlewares");
 const mongoose = require("mongoose");
-const app = express();
 
+const app = express();
+console.log("middlewares Data===",middlewares.Authorize.signUpAuth);
 app.use(express.json());
 /**
  * Status codes:
@@ -16,7 +18,7 @@ app.use(express.json());
  * 500 - Internal Server Error
  */
 app.use("/v1", routes);
-
+app.use(middlewares.Authorize.signUpAuth);
 mongoose
   .connect("mongodb://localhost:27017/node_basics")
   .then(() => console.log("Database connected successfully"))
@@ -25,7 +27,7 @@ mongoose
 const server = http.createServer(app);
 
 server
-  .listen(3000)
+  .listen(3001)
   .on("listening", () => {
     console.log(`Server is running on port ${server.address().port}`);
   })

@@ -1,5 +1,5 @@
 "use strict";
-
+const { UserModel } = require('../models')
 /**
  * Get all record
  * @param { req, res }
@@ -7,11 +7,11 @@
  */
 const index = async (req, res, next) => {
   try {
-    // next() or
+    const getdata = await UserModel.find()
     return res.status(200).json({
       success: true,
       message: "Users fetched successfully.",
-      data: [],
+      data: [getdata],
     });
   } catch (error) {
     return res.status(500).json({
@@ -29,11 +29,17 @@ const index = async (req, res, next) => {
  */
 const store = async (req, res, next) => {
   try {
-    const data =req.body;
+    const { firstname, lastname, email, password } = req.body;
+    await UserModel.create({
+      firstname,
+      lastname,
+      email,
+      password
+    });
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [data],
+      data: [req.body],
     });
   } catch (error) {
     return res.status(500).json({
@@ -52,11 +58,12 @@ const store = async (req, res, next) => {
  */
 const details = async (req, res, next) => {
   try {
-    // next() or
+    const { email } = req.params
+    const getOneuser = await UserModel.findOne({ email })
     return res.status(200).json({
       success: true,
       message: "Details fatched successfully.",
-      data: {},
+      data: {getOneuser},
     });
   } catch (error) {
     return res.status(500).json({
@@ -75,11 +82,11 @@ const details = async (req, res, next) => {
  */
 const update = async (req, res, next) => {
   try {
-    // next() or
+    const updateUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
     return res.status(200).json({
       success: true,
       message: "Data updated successfully.",
-      data: [],
+      data: [updateUser],
     });
   } catch (error) {
     return res.status(500).json({
@@ -97,11 +104,12 @@ const update = async (req, res, next) => {
  */
 const destroy = async (req, res, next) => {
   try {
-    // next() or
+
+   const deletedUser=  await UserModel.findByIdAndDelete(req.params.id)
     return res.status(200).json({
       success: true,
       message: "Data deleted successfully.",
-      data: [],
+      data: [deletedUser],
     });
   } catch (error) {
     return res.status(500).json({

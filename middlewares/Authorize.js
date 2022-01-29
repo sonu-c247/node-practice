@@ -1,6 +1,13 @@
-const Authorize = (req, res, next) => {
+const { UserModel } = require("../models");
+
+const Authorize = async(req, res, next) => {
     const check = req.body;
-    if(!check.firstName.match(/^[a-z]+$/i))
+    const existingUser = await UserModel.findOne({ email: check.email })
+    if(existingUser)
+    {
+        res.status(403).send(`${req.body.email} is already taken`);
+    }
+    else if(!check.firstName.match(/^[a-z]+$/i))
     {
         return res.status(403).send("FirstName is required");
     }
@@ -17,7 +24,7 @@ const Authorize = (req, res, next) => {
         return res.status(403).send("Password must be 8 characters including one uppercase letter, one special character and alphanumeric characters");
     }
     else{
-        console.log(" Data saved successfully!!");
+        console.log("UserData Saved Successfully!");
         next()    
     }
 }

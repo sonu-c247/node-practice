@@ -6,13 +6,13 @@ const { UserModel } = require("../models");
  * @param { req, res }
  * @returns JsonResponse
  */
-const index = async (req, res, next) => {
+const index = async (req, res) => {
   try {
-    // next() or
-    return res.status(200).json({
+    const getData = await UserModel.find();
+      return res.status(200).json({
       success: true,
-      message: "Users fetched successfully.",
-      data: [],
+      message: "Users fetched Successfully.",
+      data: getData
     });
   } catch (error) {
     return res.status(500).json({
@@ -31,7 +31,6 @@ const index = async (req, res, next) => {
 const store = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-
     await UserModel.create({
       firstName,
       lastName,
@@ -42,7 +41,7 @@ const store = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [req.body],
+      data: [req.body]
     });
   } catch (error) {
     console.log(error);
@@ -60,13 +59,13 @@ const store = async (req, res) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const details = async (req, res, next) => {
+const details = async (req, res) => {
   try {
-    // next() or
-    return res.status(200).json({
+      const userDetails = await UserModel.findOne({_id: req.params.id});    
+      return res.status(200).json({
       success: true,
       message: "Details fatched successfully.",
-      data: {},
+      data: userDetails
     });
   } catch (error) {
     return res.status(500).json({
@@ -83,13 +82,15 @@ const details = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
-    // next() or
+    const updateUser = await UserModel.findByIdAndUpdate(req.params.id , req.body , {
+      new : true
+    });
     return res.status(200).json({
       success: true,
       message: "Data updated successfully.",
-      data: [],
+      data: updateUser
     });
   } catch (error) {
     return res.status(500).json({
@@ -105,16 +106,17 @@ const update = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const destroy = async (req, res, next) => {
+const destroy = async (req, res) => {
   try {
     // next() or
-    return res.status(200).json({
-      success: true,
-      message: "Data deleted successfully.",
-      data: [],
-    });
-  } catch (error) {
-    return res.status(500).json({
+      const deleteUser = await UserModel.findByIdAndDelete(req.params.id);
+      return res.status(200).json({
+          success: true,
+          message: "Data deleted successfully.",
+          data : deleteUser
+      });
+  }catch(error) {
+      return res.status(500).json({
       success: false,
       message:
         "We are having some error while completing your request. Please try again after some time.",

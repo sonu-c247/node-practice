@@ -1,5 +1,6 @@
 "use strict";
 const { UserModel } = require("../models");
+const {Authorize} = require("../middlewares");
 
 /**
  * Get all record
@@ -9,6 +10,7 @@ const { UserModel } = require("../models");
 const index = async (req, res, next) => {
   try {
     // next() or
+    
     return res.status(200).json({
       success: true,
       message: "Users fetched successfully.",
@@ -28,22 +30,27 @@ const index = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const store = async (req, res) => {
+const store = async (req, res,next) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
 
-    await UserModel.create({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
 
-    return res.status(200).json({
-      success: true,
-      message: "Data saved successfully.",
-      data: [],
-    });
+    // res=Authorize.validation(req, res,next);
+
+          const { firstName, lastName, email, password } = req.body;
+          await UserModel.create({
+            firstName,
+            lastName,
+            email,
+            password,
+          });
+
+          return res.status(200).json({
+            success: true,
+            message: "Data saved successfully.",
+            data: [],
+          });
+   
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({

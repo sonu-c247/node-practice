@@ -2,9 +2,16 @@ const http = require("http");
 const express = require("express");
 const routes = require("./routes");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+
+
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 /**
  * Status codes:
  * 200 - OK
@@ -17,10 +24,16 @@ app.use(express.json());
  */
 app.use("/v1", routes);
 
-mongoose
-  .connect("mongodb://localhost:27017/node_basics")
-  .then(() => console.log("Database connected successfully"))
-  .catch(console.log);
+// mongoose.connect("mongodb://localhost:27017/node_basics", function(err, db) {
+//   if (err) throw err;
+//   console.log("Database created!");
+
+// });
+
+// mongoose
+//   .connect("mongodb://localhost:27017/node_basics")
+//   .then(() => console.log("Database connected successfully"))
+//   .catch(console.log);
 
 const server = http.createServer(app);
 

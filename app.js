@@ -1,10 +1,10 @@
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
-const middlewares = require("./middlewares");
-
+const mongoose = require("mongoose");
 const app = express();
-console.log("middlewares Data===",middlewares.signUpAuth);
+
+app.use(express.json());
 /**
  * Status codes:
  * 200 - OK
@@ -17,6 +17,11 @@ console.log("middlewares Data===",middlewares.signUpAuth);
  */
 app.use("/v1", routes);
 app.use(middlewares);
+
+mongoose
+  .connect("mongodb://localhost:27017/node_basics")
+  .then(() => console.log("Database connected successfully"))
+  .catch(console.log);
 
 const server = http.createServer(app);
 

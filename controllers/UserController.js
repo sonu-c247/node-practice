@@ -1,17 +1,20 @@
 "use strict";
+const { UserModel } = require("../models");
+const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 
 /**
  * Get all record
  * @param { req, res }
  * @returns JsonResponse
  */
-const index = async (req, res, next) => {
+const index = async (req, res) => {
   try {
-    // next() or
+    const users = await UserModel.find();
     return res.status(200).json({
       success: true,
       message: "Users fetched successfully.",
-      data: [],
+      data: users,
     });
   } catch (error) {
     return res.status(500).json({
@@ -27,15 +30,26 @@ const index = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const store = async (req, res, next) => {
+const store = async (req, res) => {
   try {
-    // next() or
+    const { firstName, lastName, email, password: plainPassword } = req.body;
+
+    const password = bcrypt.hashSync(plainPassword);
+
+    await UserModel.create({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
       data: [],
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message:

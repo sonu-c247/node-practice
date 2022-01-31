@@ -20,6 +20,9 @@ const signup = async (req, res, next) => {
     for(var key in rules) {
         if(rules[key].required && !req.body[key])
             errors.push(key + ' is required');
+        
+        if(rules[key].string && req.body[key] && typeof req.body[key] !== 'string' )
+            errors.push(key + ' must be string');
 
         if(rules[key].minlength && req.body[key] && rules[key].minlength > (req.body[key]).length)
             errors.push(key + ' should have min '+rules[key].minlength + ' characters');

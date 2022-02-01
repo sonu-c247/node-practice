@@ -12,7 +12,8 @@ const handleValidationErrors = async (req, res, next) => {
     const errorsArray = errors.array();
     let errorMessages = {};
     errorsArray.forEach((error) => {
-      errorMessages[error.param] = error.msg;
+      if(!errorMessages[error.param])
+        errorMessages[error.param] = error.msg;
     });
     return res
       .status(422)

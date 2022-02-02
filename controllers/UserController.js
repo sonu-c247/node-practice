@@ -1,13 +1,14 @@
 "use strict";
 const { UserModel } = require("../models");
-const {Authorize} = require("../middlewares");
+const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 
 /**
  * Get all record
  * @param { req, res }
  * @returns JsonResponse
  */
-const index = async (req, res, next) => {
+const index = async (req, res) => {
   try {
     // next() or
     
@@ -33,11 +34,13 @@ const index = async (req, res, next) => {
  */
 const store = async (req, res,next) => {
   try {
+    const { firstName, lastName, email, password: plainPassword } = req.body;
+
+    const password = bcrypt.hashSync(plainPassword);
 
 
     // res=Authorize.validation(req, res,next);
 
-          const { firstName, lastName, email, password } = req.body;
           await UserModel.create({
             firstName,
             lastName,

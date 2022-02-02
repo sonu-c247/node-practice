@@ -30,10 +30,10 @@ app.use("/v1", routes);
 
 // });
 
-// mongoose
-//   .connect("mongodb://localhost:27017/node_basics")
-//   .then(() => console.log("Database connected successfully"))
-//   .catch(console.log);
+mongoose
+  .connect("mongodb://localhost:27017/node_basics")
+  .then(() => console.log("Database connected successfully"))
+  .catch(console.log);
 
 const server = http.createServer(app);
 

@@ -11,10 +11,11 @@ const index = async (req, res, next) => {
   try {
     // next() or
     
+       const users = await UserModel.find({firstName:"orhan"});
     return res.status(200).json({
       success: true,
       message: "Users fetched successfully.",
-      data: [],
+      data: users,
     });
   } catch (error) {
     return res.status(500).json({

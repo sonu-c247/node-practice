@@ -25,10 +25,10 @@ const validation = (req, res, next) => {
    
     }
     if(!Object.keys(error).length==0){
-       return res.status(403).send(error);
+       return res.status(422).send(error);
     }
 
-
+    next();
     
 }
 module.exports = {

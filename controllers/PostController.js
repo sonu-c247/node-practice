@@ -1,9 +1,31 @@
 "use strict";
 
 /**
- * Get all record
- * @param { req, res }
- * @returns JsonResponse
+ * @api {get} /posts Posts List
+ * @apiName GetPost
+ * @apiGroup Post
+ * @apiDescription Get list of all posts
+ * @apiQuery {number} limit=10 limit number of records
+ * @apiQuery {number} page=1 current page number
+ * @apiSuccessExample {json} Success:
+ * HTTP/1.1 200 OK
+ * {
+ *   message: "Posts fetched successfully.",
+ *   data: [{
+ *     title: "John",
+ *     shortDescription: "Doe",
+ *     slug: "john.doe@example.email"
+ *     description: "active"
+ *   }],
+ *}
+ * @apiError (Error 500) {string} message error message
+ * @apiError (Error 500) {string} error error stack
+ * @apiErrorExample {json} Error-Response:
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "message": "We are having some error while completing your request. Please try again after some time."
+ *   "error": actual error stack
+ * }
  */
 const index = async (req, res, next) => {
   try {

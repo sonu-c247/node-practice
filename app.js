@@ -16,10 +16,10 @@ app.use(express.json());
  * 500 - Internal Server Error
  */
 app.use("/v1", routes);
-app.use(middlewares);
+// app.use(middlewares);
 
 mongoose
-  .connect("mongodb://localhost:27017/node_basics")
+  .connect('mongodb://127.0.0.1:27017/node_basics')
   .then(() => console.log("Database connected successfully"))
   .catch(console.log);
 

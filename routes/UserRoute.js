@@ -12,7 +12,7 @@ router.post(
   UserController.store
 );
 router.put("/:id", UserController.update);
-router.delete("/", UserController.destroy);
+router.delete("/:id", UserController.destroy);
 router.get("/:id", UserController.details);
 
 module.exports = router;

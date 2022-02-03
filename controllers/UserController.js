@@ -35,8 +35,7 @@ const store = async (req, res) => {
     const { firstName, lastName, email, password: plainPassword } = req.body;
 
     const password = bcrypt.hashSync(plainPassword);
-
-    await UserModel.create({
+    const userData = await UserModel.create({
       firstName,
       lastName,
       email,
@@ -46,7 +45,7 @@ const store = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Data saved successfully.",
-      data: [],
+      data: userData,
     });
   } catch (error) {
     console.log(error);
@@ -64,14 +63,27 @@ const store = async (req, res) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const details = async (req, res, next) => {
+const details = async (req, res) => {
   try {
     // next() or
-    return res.status(200).json({
-      success: true,
-      message: "Details fatched successfully.",
-      data: {},
+    let id = req.params.id;
+    const userDetails  = UserModel.where({ _id: id,firstName:'prem' });
+    userDetails.findOne(function (err, UserModel) {
+      if (UserModel!=null) {
+        return res.status(200).json({
+          success: true,
+          message: "Details fatched successfully.",
+          data: UserModel ,
+        });
+      }else{
+        return res.status(201).json({
+          success: false,
+          message: "Details not found.",
+          data: '' ,
+        });
+      }
     });
+   
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -87,13 +99,24 @@ const details = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
-    // next() or
-    return res.status(200).json({
-      success: true,
-      message: "Data updated successfully.",
-      data: [],
+    const id = req.params.id;
+    const dataToUpdate = { firstName: 'jason',lastName:'John' }
+    UserModel.findByIdAndUpdate(id, dataToUpdate,{ upsert: false },function(err,updatedData){
+      if(err) {
+        return res.status(201).json({
+          success: true,
+          message: "Somthing went wrong.",
+          data: '',
+        });
+      }else{
+        return res.status(200).json({
+          success: true,
+          message: "Data updated successfully.",
+          data: updatedData,
+        });
+      }
     });
   } catch (error) {
     return res.status(500).json({
@@ -109,15 +132,25 @@ const update = async (req, res, next) => {
  * @param { req, res }
  * @returns JsonResponse
  */
-const destroy = async (req, res, next) => {
+const destroy = async (req, res) => {
   try {
     // next() or
-    return res.status(200).json({
-      success: true,
-      message: "Data deleted successfully.",
-      data: [],
-    });
+    const deleteStatus = await UserModel.deleteOne({ _id:req.params.id  });
+    if(deleteStatus.deletedCount==1){
+      return res.status(200).json({
+        success: true,
+        message: "Data deleted successfully.",
+        data: deleteStatus.deletedCount,
+      });
+    }else{
+      return res.status(200).json({
+        success: true,
+        message: "Somethig went wrong.",
+        data: deleteStatus.deletedCount,
+      });
+    }
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message:

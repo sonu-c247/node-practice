@@ -2,9 +2,39 @@ const http = require("http");
 const express = require("express");
 const routes = require("./routes");
 const mongoose = require("mongoose");
+const { engine } = require("express-handlebars");
+const path = require("path");
+const fs = require("fs");
+const handlebar = require("handlebars");
+const { default: axios } = require("axios");
 const app = express();
 
 app.use(express.json());
+
+app.engine(
+  ".hbs",
+  engine({
+    extname: ".hbs",
+    defaultLayout: "main",
+    helpers: {
+      getFormattedNumber: (number) => {
+        return new Intl.NumberFormat("en-IN", {
+          maximumSignificantDigits: 3,
+        }).format(number);
+      },
+      truncate: (str, len) => {
+        // truncate string
+        if (str.length > len && str.length > 0) {
+          return str.substring(0, len) + "...";
+        }
+        return str;
+      },
+    },
+  })
+);
+app.set("view engine", ".hbs");
+app.set("views", path.join(__dirname, "views"));
+
 /**
  * Status codes:
  * 200 - OK
@@ -17,6 +47,42 @@ app.use(express.json());
  */
 app.use("/v1", routes);
 // app.use(middlewares);
+
+app.get("/", async (req, res) => {
+  const { data } = await axios.get(
+    "https://jsonplaceholder.typicode.com/posts"
+  );
+  return res.render("home/index", {
+    total: data.length,
+    posts: data,
+  });
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { data } = await axios.get(
+    `https://jsonplaceholder.typicode.com/posts/${req.params.id}`
+  );
+  const { data: comments } = await axios.get(
+    `https://jsonplaceholder.typicode.com/posts/${req.params.id}/comments`
+  );
+  const layout = fs
+    .readFileSync(path.join(__dirname, "views/layouts/main.hbs"))
+    .toString();
+
+  const fileData = fs
+    .readFileSync(path.join(__dirname, "views/post/details.hbs"))
+    .toString();
+  const template = handlebar.compile(layout);
+  const fileTemplate = handlebar.compile(fileData);
+  const html = template({
+    body: fileTemplate({
+      postDetails: data,
+      comments,
+    }),
+  });
+
+  return res.send(html);
+});
 
 mongoose
   .connect('mongodb://127.0.0.1:27017/node_basics')

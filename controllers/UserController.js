@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
 
 /**
- * @api {get} /users User List
+ * @api {get} /user User List
  * @apiName GetUser
  * @apiGroup User
  * @apiDescription Get list of all users
@@ -52,7 +52,7 @@ const index = async (req, res) => {
   }
 };
 /**
- * @api {post} /users Create User
+ * @api {post} /user Create User
  * @apiName CreateUser
  * @apiGroup User
  * @apiDescription Creates a new user
@@ -104,15 +104,38 @@ const store = async (req, res) => {
 };
 
 /**
- * Get only single record
- * @param { req, res }
- * @returns JsonResponse
+ * @api {get} /user/:id Get User info
+ * @apiName GetUserByID
+ * @apiGroup User
+ * @apiParam {String} id Users unique ID.
+ * @apiDescription Get a user by passing ID
+ * @apiSuccess {String} firstName First name of the User.
+ * @apiSuccess {String} lastName  Last name of the User.
+ * @apiSuccess {String} email  Email of user.
+ * @apiSuccessExample {json} Success:
+ * HTTP/1.1 200 OK
+ * {
+ *   message: "Details fatched successfully.",
+ *   data: [{
+ *     firstName: "John",
+ *     lastName: "Doe",
+ *     email: "john.doe@example.email"
+ *     status: "active" // allowed values, active, inactive
+ *   }],
+ *}
+ * @apiError (Error 500) {string} NotFound The id of the User was not found.
+ * @apiErrorExample {json} Error-Response:
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "message": "We are having some error while completing your request. Please try again after some time."
+ *   "error": actual error stack
+ * }
  */
 const details = async (req, res) => {
   try {
     // next() or
     let id = req.params.id;
-    const userDetails  = UserModel.where({ _id: id,firstName:'prem' });
+    const userDetails  = UserModel.where({ _id: id });
     userDetails.findOne(function (err, UserModel) {
       if (UserModel!=null) {
         return res.status(200).json({
@@ -140,9 +163,31 @@ const details = async (req, res) => {
 };
 
 /**
- * update a record
- * @param { req, res }
- * @returns JsonResponse
+ * @api {put} /user/:id Modify User information
+ * @apiName PutUser
+ * @apiGroup User
+ * @apiParam {String} id Users unique ID.
+ * @apiParam {String} [firstName] Firstname of the User.
+ * @apiParam {String} lastName  Lastname of the User.
+ * @apiDescription Update a user information by passing ID
+ * @apiSuccessExample {json} Success:
+ * HTTP/1.1 200 OK
+ * {
+ *   message: "Details Updated successfully.",
+ *   data: [{
+ *     firstName: "John",
+ *     lastName: "Doe",
+ *     email: "john.doe@example.email"
+ *     status: "active" // allowed values, active, inactive
+ *   }],
+ *}
+ * @apiError (Error 500) {string} NotFound The id of the User was not found.
+ * @apiErrorExample {json} Error-Response:
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "message": "We are having some error while completing your request. Please try again after some time."
+ *   "error": actual error stack
+ * }
  */
 const update = async (req, res) => {
   try {

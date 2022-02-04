@@ -1,0 +1,16 @@
+<div>
+  <h1>{{postDetails.title}}</h1>
+  {{postDetails.body}}
+
+  {{#each comments}}
+    <p>
+      {{this.name}}
+    </p>
+    <p>
+      {{this.email}}
+    </p>
+    <p>
+      {{this.body}}
+    </p>
+  {{/each}}
+</div>

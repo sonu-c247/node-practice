@@ -99,6 +99,20 @@ app.post("/test-email", async (req, res) => {
   });
 });
 
+app.get("/test-email", async (req, res) => {
+  await Email.sendEmail(
+    AVAILABLE_TEMPLATES.SIGNUP,
+    {
+      name: "John Doe",
+    },
+    "sonu@chapter247.com"
+  );
+
+  return res.status(200).json({
+    message: "Email sent successfully.",
+  });
+});
+
 mongoose
   .connect("mongodb://localhost:27017/node_basics")
   .then(() => console.log("Database connected successfully"))

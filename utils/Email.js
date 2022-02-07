@@ -12,8 +12,9 @@ class Email {
     this.body = "";
     this.subject = "";
     this.cc = [];
-
-    this.setTemplate(template);
+    if (template) {
+      this.setTemplate(template);
+    }
   }
 
   setTemplate(template) {
@@ -86,6 +87,13 @@ class Email {
     });
 
     return info;
+  }
+
+  static sendEmail(template, data, email, cc = []) {
+    const emailClient = new Email(template);
+    emailClient.setBody(data);
+    emailClient.setCC(cc);
+    return emailClient.send(email);
   }
 }
 

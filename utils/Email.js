@@ -9,12 +9,11 @@ const AVAILABLE_TEMPLATES = {
 
 class Email {
   constructor(template = "") {
-    if (template) {
-      this.template = template;
-    }
     this.body = "";
     this.subject = "";
     this.cc = [];
+
+    this.setTemplate(template);
   }
 
   setTemplate(template) {
@@ -34,6 +33,9 @@ class Email {
   }
 
   setBody(data) {
+    if (!this.template) {
+      throw new Error("Template not set");
+    }
     const fileBody = fs
       .readFileSync(
         path.join(__dirname, "..", `views/templates/${this.template}.hbs`)
@@ -58,6 +60,13 @@ class Email {
   }
 
   async send(email) {
+    if (!email) {
+      throw new Error("Email not set");
+    }
+    if (!this.body || !this.subject) {
+      throw new Error("Body or subject not set");
+    }
+
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -71,11 +80,10 @@ class Email {
     const info = await transporter.sendMail({
       from: `"ABC" <${process.env.EMAIL_USERNAME}>`,
       to: email,
+      cc: this.cc,
       subject: this.subject,
       html: this.body,
     });
-
-    console.log(info);
 
     return info;
   }

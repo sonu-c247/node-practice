@@ -1,3 +1,4 @@
+require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const routes = require("./routes");
@@ -7,6 +8,7 @@ const path = require("path");
 const fs = require("fs");
 const handlebar = require("handlebars");
 const { default: axios } = require("axios");
+const { Email, AVAILABLE_TEMPLATES } = require("./utils/Email");
 const app = express();
 
 app.use(express.json());
@@ -81,6 +83,20 @@ app.get("/post/:id", async (req, res) => {
   });
 
   return res.send(html);
+});
+
+app.post("/test-email", async (req, res) => {
+  const emailClient = new Email();
+  emailClient.setTemplate(AVAILABLE_TEMPLATES.SIGNUP);
+  emailClient.setBody({
+    name: "John Doe",
+    company: "ABC",
+  });
+  await emailClient.send("sonu@chapter247.com");
+
+  return res.status(200).json({
+    message: "Email sent successfully.",
+  });
 });
 
 mongoose

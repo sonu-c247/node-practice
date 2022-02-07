@@ -1,15 +1,22 @@
 const http = require("http");
 const express = require("express");
-const routes = require("./routes");
 const mongoose = require("mongoose");
 const { engine } = require("express-handlebars");
+var bodyParser = require('body-parser');
+const routes = require("./routes");
 const path = require("path");
 const fs = require("fs");
 const handlebar = require("handlebars");
 const { default: axios } = require("axios");
+const { Validations } = require("./middlewares");
+const { UserValidations } = require("./validations");
+
 const app = express();
 
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.engine(
   ".hbs",
@@ -49,13 +56,18 @@ app.use("/v1", routes);
 // app.use(middlewares);
 
 app.get("/", async (req, res) => {
-  const { data } = await axios.get(
-    "https://jsonplaceholder.typicode.com/posts"
-  );
-  return res.render("home/index", {
-    total: data.length,
-    posts: data,
-  });
+  return res.render("home/index");
+});
+
+app.get("/login", async (req, res) => {
+  return res.render("login/index");
+});
+app.get("/signup", async (req, res) => {
+  return res.render("signup/index");
+});
+app.post("/postSignup", async (req, res) => {
+  console.log(req.body.firstName);
+ // return res.render("signup/index");
 });
 
 app.get("/post/:id", async (req, res) => {

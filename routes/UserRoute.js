@@ -4,7 +4,7 @@ const { UserController } = require("../controllers");
 const { Validations } = require("../middlewares");
 const { UserValidations } = require("../validations");
 
-router.get("/", UserController.index);
+router.get("/",UserController.index);
 router.post(
   "/",
   UserValidations.SignupValidations,

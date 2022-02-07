@@ -18,10 +18,11 @@
   "dependencies": {
     "axios": "^0.25.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.1",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-validator": "^6.14.0",
     "handlebars": "^4.7.7",
-    "mongoose": "^6.1.8"
+    "mongoose": "^6.2.0"
   }
 }

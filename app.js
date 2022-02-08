@@ -1,3 +1,4 @@
+require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -11,6 +12,7 @@ const { default: axios } = require("axios");
 const { Validations } = require("./middlewares");
 const { UserValidations } = require("./validations");
 
+const { Email, AVAILABLE_TEMPLATES } = require("./utils/Email");
 const app = express();
 
 app.use(express.json());
@@ -94,6 +96,34 @@ app.get("/post/:id", async (req, res) => {
   });
 
   return res.send(html);
+});
+
+app.post("/test-email", async (req, res) => {
+  const emailClient = new Email();
+  emailClient.setTemplate(AVAILABLE_TEMPLATES.SIGNUP);
+  emailClient.setBody({
+    name: "John Doe",
+    company: "ABC",
+  });
+  await emailClient.send("sonu@chapter247.com");
+
+  return res.status(200).json({
+    message: "Email sent successfully.",
+  });
+});
+
+app.get("/test-email", async (req, res) => {
+  await Email.sendEmail(
+    AVAILABLE_TEMPLATES.SIGNUP,
+    {
+      name: "John Doe",
+    },
+    "sonu@chapter247.com"
+  );
+
+  return res.status(200).json({
+    message: "Email sent successfully.",
+  });
 });
 
 mongoose
